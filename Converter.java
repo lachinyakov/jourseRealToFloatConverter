@@ -1,6 +1,7 @@
 
 public class Converter {
     public static int maxLength;
+    public static int sign; 
 
     public static void main(String[] args) {
         maxLength = 23;
@@ -8,27 +9,40 @@ public class Converter {
         String[] numbers = input.split("\\.");
         int intgr        = Integer.parseInt(numbers[0]);
         String resInt    = "0";
-        int fraction     = Integer.parseInt(numbers[1]);
+        int fraction     = 0;
         String resFrac   = "";
+        if (numbers.length > 1) {
+            fraction     = Integer.parseInt(numbers[1]);
+        }
+
+        setSign(intgr, fraction);      
         if (intgr  > 0) {
             resInt = convertInteger(intgr);
         }
 
+        String result = resInt;
         if (fraction > 0) {
             int lenghtofFraction = log10(fraction) + 1;
-            int quantityZero  = numbers[1].length() - lenghtofFraction;
-            int maxQtySymbols = lenghtofFraction + quantityZero;
-            resFrac = convertFraction(fraction, maxQtySymbols);
+            int quantityZero     = numbers[1].length() - lenghtofFraction;
+            int maxQtySymbols    = lenghtofFraction + quantityZero;
+            resFrac              = convertFraction(fraction, maxQtySymbols);
+            result               = result + "." + resFrac;
         }
 
-        System.out.println(resInt);
+        int exponent = 0;
+        if (sign == 0) {
+        	exponent = normalizeIntgr(resInt);
+        }
 
-        String result = resInt;
-        if (resFrac != "") {
-            result = result + "." + resFrac;
-        }   
 
-        System.out.println("mantisa:" + result);
+        if (sign == 1) {
+           exponent = normalizeFraction(resFrac);
+        }
+
+
+        System.out.println("sign:" + sign);
+        System.out.println("exponent:" + exponent);
+        System.out.println("result:" + result);
     }
 
     public static String convertInteger(int number) {
@@ -63,8 +77,6 @@ public class Converter {
             res = "0";
         }
 
-
-        
         if (maxLength > 0 ) {
             maxLength--;
         
@@ -116,5 +128,28 @@ public class Converter {
         }
 
         return  res;
+    }
+
+    public static void setSign(int integer, int fraction) {
+    	if (integer > 0) {
+    		sign = 0;
+    	}
+
+        if (integer == 0 && fraction > 0) {
+        	sign = 1;
+        }
+    }
+
+    public static int normalizeIntgr (String number) {
+        int result =  number.length() - 1;
+        return result;
+    }
+
+    public static int normalizeFraction (String number) {
+
+        int strLength = number.length();
+        int intLength = log10(Integer.parseInt(number));
+        int result = strLength - intLength + 1;
+        return result;
     }
 }
