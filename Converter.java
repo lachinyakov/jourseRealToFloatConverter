@@ -1,6 +1,9 @@
 
 public class Converter {
+    public static int maxLength;
+
     public static void main(String[] args) {
+        maxLength = 23;
         String input     = args[0];
         String[] numbers = input.split("\\.");
         int intgr        = Integer.parseInt(numbers[0]);
@@ -12,7 +15,10 @@ public class Converter {
         }
 
         if (fraction > 0) {
-            resFrac = convertFraction(fraction, 1);
+            int lenghtofFraction = log10(fraction) + 1;
+            int quantityZero  = numbers[1].length() - lenghtofFraction;
+            int maxQtySymbols = lenghtofFraction + quantityZero;
+            resFrac = convertFraction(fraction, maxQtySymbols);
         }
 
         System.out.println(resInt);
@@ -37,27 +43,34 @@ public class Converter {
         return convertInteger(nextValue) + Integer.toString(mod);
     }
 
-    public static String convertFraction(int number, int quantityZero) {
-        int lenghtOfNumber = log10(number) + 1;
-        int maxLength  = 23;
-        int resNumber  = number * 2;
+    /**
+     * 
+     */
+    public static String convertFraction(int number, int maxQtySymbols) {
+        int lenghtOfNumber    = log10(number) + 1;
+        int resNumber         = number * 2;
         int lenghtOfResNumber = log10(resNumber) + 1;
-        int difference        = lenghtOfResNumber - lenghtOfNumber;
 
-        String mod = Integer.toString(difference);
-        
-        String res = "" + mod;
+        String res = "";
         int nextValue = resNumber;
-        // System.out.println( " lenghtof "+ resNumber + " is " + lenghtOfResNumber);
-        // pow(10, 2 + quantityZero) <= resNumber
-        if (difference == 1) {
+        if (lenghtOfResNumber > maxQtySymbols) {
+               res = "1";
                nextValue = resNumber - pow(10, lenghtOfResNumber - 1);
-               // System.out.println(mod + " " + number + " " + pow(10, lenghtOfResNumber - 1));
                if (nextValue == 0) {
                     return res;
                 }
+        } else {
+            res = "0";
         }
-        res = res + convertFraction(nextValue, quantityZero);  
+
+
+        
+        if (maxLength > 0 ) {
+            maxLength--;
+        
+            res = res + convertFraction(nextValue, maxQtySymbols);        
+        }
+         
 
         return res;
     }
