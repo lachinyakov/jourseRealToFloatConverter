@@ -29,19 +29,19 @@ public class Converter {
             result               = result + "." + resFrac;
         }
 
-        int exponent = 0;
+        int exponent = 127;
         if (sign == 0) {
-        	exponent = normalizeIntgr(resInt);
+        	exponent = 127 + normalizeIntgr(resInt);
         }
 
 
         if (sign == 1) {
-           exponent = normalizeFraction(resFrac);
+           exponent = 127 - normalizeFraction(resFrac);
         }
 
 
         System.out.println("sign:" + sign);
-        System.out.println("exponent:" + exponent);
+        System.out.println("exponent:" + convertInteger(exponent));
         System.out.println("result:" + result);
     }
 
@@ -145,11 +145,38 @@ public class Converter {
         return result;
     }
 
-    public static int normalizeFraction (String number) {
+    public static int normalizeFraction (String numberi) {
 
-        int strLength = number.length();
-        int intLength = log10(Integer.parseInt(number));
+        int strLength = numberi.length();
+        int intLength = log10(Integer.parseInt(numberi));
         int result = strLength - intLength + 1;
         return result;
     }
+
+    // public static String binarySumm(String first, String second) {
+    		
+    // }
+
+    // public static String binarySumm(String first, String second) {
+    		
+    // }
+
+
+    // public static char bitSumm(char first char second) {
+    // 	if (first == 0 && second == 0) {
+    // 		return 0;
+    // 	}
+
+    //     if (first == 0 && second == 1) {
+    //     	return 1;
+    //     }
+
+    //     if (first == 1 && second == 0) {
+    //     	return 1;
+    //     }
+
+    //     if (first == 1 && second == 1) {
+    //     	return 10;
+    //     }
+    // }
 }
