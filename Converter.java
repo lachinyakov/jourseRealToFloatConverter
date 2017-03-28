@@ -1,18 +1,18 @@
 
 public class Converter {
-    public static int maxLength;
-    public static int sign; 
+    public static long maxLength;
+    public static long sign; 
 
     public static void main(String[] args) {
         maxLength = 23;
         String input     = args[0];
         String[] numbers = input.split("\\.");
-        int intgr        = Integer.parseInt(numbers[0]);
+        long intgr        = Long.parseLong(numbers[0]);
         String resInt    = "0";
-        int fraction     = 0;
+        long fraction     = 0;
         String resFrac   = "";
         if (numbers.length > 1) {
-            fraction     = Integer.parseInt(numbers[1]);
+            fraction     = Long.parseLong(numbers[1]);
         }
 
         setSign(intgr, fraction);      
@@ -22,51 +22,52 @@ public class Converter {
 
         String result = resInt;
         if (fraction > 0) {
-            int lenghtofFraction = log10(fraction) + 1;
-            int quantityZero     = numbers[1].length() - lenghtofFraction;
-            int maxQtySymbols    = lenghtofFraction + quantityZero;
+            long lenghtofFraction = log10(fraction) + 1;
+            long quantityZero     = numbers[1].length() - lenghtofFraction;
+            long maxQtySymbols    = lenghtofFraction + quantityZero;
             resFrac              = convertFraction(fraction, maxQtySymbols);
-            result               = result + "." + resFrac;
+            result               = result + resFrac;
         }
 
-        int exponent = 127;
+        long exponent = 127;
         if (sign == 0) {
-        	exponent = 127 + normalizeIntgr(resInt);
+        	exponent = 127 + getExponentForIntgr(resInt);
         }
 
 
         if (sign == 1) {
-           exponent = 127 - normalizeFraction(resFrac);
+           exponent = 127 - getExponentForFrctn(resFrac);
         }
 
 
         System.out.println("sign:" + sign);
         System.out.println("exponent:" + convertInteger(exponent));
-        System.out.println("result:" + result);
+
+        System.out.println("result:" + result.substring(1));
     }
 
-    public static String convertInteger(int number) {
+    public static String convertInteger(long number) {
         if (number == 1) {
             return "1";
         }
 
         String result = "";
-        int mod       = number % 2;
-        int nextValue = (number - mod) / 2;
+        long mod       = number % 2;
+        long nextValue = (number - mod) / 2;
 
-        return convertInteger(nextValue) + Integer.toString(mod);
+        return convertInteger(nextValue) + Long.toString(mod);
     }
 
     /**
      * 
      */
-    public static String convertFraction(int number, int maxQtySymbols) {
-        int lenghtOfNumber    = log10(number) + 1;
-        int resNumber         = number * 2;
-        int lenghtOfResNumber = log10(resNumber) + 1;
+    public static String convertFraction(long number, long maxQtySymbols) {
+        long lenghtOfNumber    = log10(number) + 1;
+        long resNumber         = number * 2;
+        long lenghtOfResNumber = log10(resNumber) + 1;
 
         String res = "";
-        int nextValue = resNumber;
+        long nextValue = resNumber;
         if (lenghtOfResNumber > maxQtySymbols) {
                res = "1";
                nextValue = resNumber - pow(10, lenghtOfResNumber - 1);
@@ -90,15 +91,15 @@ public class Converter {
     /**
      * Работает не корректно. Требуется для определния количества знаков.
      */
-    public static int log10 (int number) {
+    public static long log10 (long number) {
 
         if ( number < 10 ) {
             return 0;
         }
 
-        int powedNumber = 10;
-        int resExponent = 1;
-        for (int exponent = 1; powedNumber <= number; exponent++) {
+        long powedNumber = 10;
+        long resExponent = 1;
+        for (long exponent = 1; powedNumber <= number; exponent++) {
             powedNumber = pow(10, exponent);
             resExponent = exponent;
         }
@@ -112,8 +113,8 @@ public class Converter {
      * @param input    Число.
      * @param exponent Требуемая степень.
      */  
-    public static int pow(int input, int exponent) {
-        int res = input;
+    public static long pow(long input, long exponent) {
+        long res = input;
         if (exponent > 0) {
             for(int i = 1; i < exponent; i++) {
                 res = res * input;
@@ -130,7 +131,7 @@ public class Converter {
         return  res;
     }
 
-    public static void setSign(int integer, int fraction) {
+    public static void setSign(long integer, long fraction) {
     	if (integer > 0) {
     		sign = 0;
     	}
@@ -140,43 +141,25 @@ public class Converter {
         }
     }
 
-    public static int normalizeIntgr (String number) {
-        int result =  number.length() - 1;
+
+    public static long getExponentForIntgr (String number) {
+        long result =  number.length() - 1;
         return result;
     }
 
-    public static int normalizeFraction (String numberi) {
-
+    public static long getExponentForFrctn (String numberi) {
+    	int result    = 0;
         int strLength = numberi.length();
-        int intLength = log10(Integer.parseInt(numberi));
-        int result = strLength - intLength + 1;
+        char[] strArr = numberi.toCharArray();
+		for (int i = 0; i < strLength; i++) {
+			result = result + 1;
+			char requiredSymbol = strArr[i];
+			if (requiredSymbol == '1')
+			{
+				break;
+			}
+		}
+
         return result;
     }
-
-    // public static String binarySumm(String first, String second) {
-    		
-    // }
-
-    // public static String binarySumm(String first, String second) {
-    		
-    // }
-
-
-    // public static char bitSumm(char first char second) {
-    // 	if (first == 0 && second == 0) {
-    // 		return 0;
-    // 	}
-
-    //     if (first == 0 && second == 1) {
-    //     	return 1;
-    //     }
-
-    //     if (first == 1 && second == 0) {
-    //     	return 1;
-    //     }
-
-    //     if (first == 1 && second == 1) {
-    //     	return 10;
-    //     }
-    // }
 }
