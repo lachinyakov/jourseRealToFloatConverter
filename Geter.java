@@ -2,29 +2,30 @@
 public class Geter {
 	public static void main(String[] args) {
         String firstString  = args[0];
+        String[] requestNetwork = args[0].split("\\.");
+        System.out.println("input network address: " + args[0]);
+
         String secondString = args[1];
+
+        System.out.println("input host address in CIDR notation: " + args[1]);
+
         String[] ipMask     = secondString.split("/");
         String[] ip        = ipMask[0].split("\\.");
         String[] mask         = binMask(ipMask[1]);
-        System.out.println(mask[1]);
         String[] arg1       = ip;
         String[]binArg2    = mask;
         String[]binArg1     = convertArrInt(arg1);
     	String[] result  = new String[4];	
     	for (int i =0; i < result.length; i++) {
-    		System.out.println("arg1:" + binArg1[i]);
-    		System.out.println("arg2:" + binArg2[i]);
    			String res   = binConunction(binArg1[i], binArg2[i]);
    			int    decimal = binToDec(res);
-    		System.out.println("res: " + res);
-    		System.out.println("dec: " + decimal);    		
-    		System.out.println("\n\n\n");
    			result[i] = Integer.toString(decimal);
     	}
 
 
     	String res = strArrToStr(result);	
-       System.out.println("Result: " + res);
+    	boolean eqaul = (requestNetwork == result);
+       System.out.println("Result: " + res + " - " + eqaul);
 	}
 
 	public static String[] convertArrInt(String[] arrInt) {
@@ -34,7 +35,6 @@ public class Geter {
 			result[i] = addZero(converted);
 		}
 	
-	System.out.println(result[1]);
 		return result;
 	}
 
@@ -147,7 +147,6 @@ public class Geter {
                 }
             
             }
-            System.out.println(res);
 
             result[i] = res;
         }
