@@ -1,12 +1,15 @@
 
 public class Geter {
 	public static void main(String[] args) {
-		String firstString  = args[0];
-		String secondString = args[1];
-		String[] arg1       = firstString.split("\\.");
-    	String[] arg2       = secondString.split("\\.");
-    	String[] binArg1    = convertArrInt(arg1);
-    	String[] binArg2    = convertArrInt(arg2);
+        String firstString  = args[0];
+        String secondString = args[1];
+        String[] ipMask     = secondString.split("/");
+        String[] ip        = ipMask[0].split("\\.");
+        String[] mask         = binMask(ipMask[1]);
+        System.out.println(mask[1]);
+        String[] arg1       = ip;
+        String[]binArg2    = mask;
+        String[]binArg1     = convertArrInt(arg1);
     	String[] result  = new String[4];	
     	for (int i =0; i < result.length; i++) {
     		System.out.println("arg1:" + binArg1[i]);
@@ -22,14 +25,6 @@ public class Geter {
 
     	String res = strArrToStr(result);	
        System.out.println("Result: " + res);
-		// Options options = new Options();
-		// Option ip = new Option("i", "input", true, "input ipAdrr");
-		// ip.setRequired(true);
-		// options.addOption(ip);
-
-		// Option mask = new Option("m", "input", true, "input Mask");
-		// mask.setRequired(true);
-		// options.addOption(mask);
 	}
 
 	public static String[] convertArrInt(String[] arrInt) {
@@ -137,4 +132,26 @@ public class Geter {
 
 		return strBuilder.toString();
    	}
+
+    public static String[] binMask(String number) {
+        int quantity    = Integer.parseInt(number);
+        String[] result = new String[4];
+        for (int i = 0; i < 4; i++ ) {
+            String res = "";
+            for (int k = 0; k < 8; k++) {
+                if (quantity > 0) {
+                    res = res + "1";
+                    quantity = quantity -1;
+                } else {
+                    res = res + "0";
+                }
+            
+            }
+            System.out.println(res);
+
+            result[i] = res;
+        }
+
+        return result;
+    }
 }
