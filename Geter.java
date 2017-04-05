@@ -24,8 +24,8 @@ public class Geter {
 
 
     	String res = strArrToStr(result);	
-    	boolean eqaul = (requestNetwork == result);
-       System.out.println("Result: " + res + " - " + eqaul);
+    	boolean equal = (requestNetwork == result);
+       System.out.println("Result: " + res + " - " + equal);
 	}
 
 	public static String[] convertArrInt(String[] arrInt) {
